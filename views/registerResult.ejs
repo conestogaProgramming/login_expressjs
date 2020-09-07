@@ -9,9 +9,6 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <!-- 최초 기본 구글로그인 버튼 구현 -->
-  <!-- <meta name="google-signin-client_id" content="251124786260-fr5q6pg249tthkstvf8f9lkhb28kk9tc.apps.googleusercontent.com">  --> 
-
   <title>Register-Eunsuck</title>
 
   <!-- Custom fonts for this template-->
@@ -79,91 +76,6 @@
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>  
-
-
-  
-  <!-- 구글로그인 -->
-  <script src="https://apis.google.com/js/platform.js" async defer></script>  
-
-  <!-- 구글로그인 auth 초기화 -->
-  <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-  
-  <script>
-    function checkLoginStatus() {
-      let loginBtn = document.querySelector('#loginBtn');
-      if(gAuth.isSignedIn.get()) {
-        console.log('logged in');
-        loginBtn.value = 'Google Logout';
-      } else {
-        console.log('logged out');
-        loginBtn.value = 'Google Login';
-      }
-    }
-  </script>
-
-  <!-- 최초 기본 구글로그인 버튼의 함수 -->
-  <!-- <script>
-    function onSignIn(googleUser) {
-      let profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    }
-  </script> -->
-  
-  <!-- 구글로그인 auth 초기화 -->
-  <script>
-    function init(){
-      console.log('init');
-      gapi.load('auth2', function() {
-        console.log('auth2');
-        window.gAuth = gapi.auth2.init({
-          client_id:'251124786260-fr5q6pg249tthkstvf8f9lkhb28kk9tc.apps.googleusercontent.com'
-        })
-        gAuth.then(function(){
-          console.log('googleAuth success');
-          checkLoginStatus()          
-        }, function(){
-          console.log('googleAuth fail');
-        });
-      });
-    } 
-  </script>
-
-  <!-- 페이스북 -->
-  <script>
-    window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '945171262626801',
-      cookie     : true,                     // Enable cookies to allow the server to access the session.
-      xfbml      : true,                     // Parse social plugins on this webpage.
-      version    : 'v8.0'           // Use this Graph API version for this call.
-    });
-
-    FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-      console.log(response)
-      //statusChangeCallback(response);        // Returns the login status.
-      if(response.status === 'connected') {
-        document.querySelector('#authBtn').value = 'Facebook Logout'
-      } else {
-        document.querySelector('#authBtn').value = 'Facebook Login'
-      }
-    });
-
-    function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-      });
-    }    
-  };  
-  </script>  
-
-  <!-- Load the 페이스북 JS SDK asynchronously -->
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
 </body>
 
