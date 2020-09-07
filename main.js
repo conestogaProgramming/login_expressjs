@@ -7,8 +7,7 @@ const PORT = process.env.PORT || 3000;
 let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
 
-// 션 라우터
-let oAuthRouter = require('./routes/oauth');
+
 // 일신 라우터
 let loginRouter = require('./routes/login');
 // 은석 라우터
@@ -27,8 +26,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname+'/public'));
 
 
-// 션 라우터
-app.use('/oauth', oAuthRouter);
+
 // 일신 라우터
 app.use('/', loginRouter); 
 app.use('/login', loginRouter); 
