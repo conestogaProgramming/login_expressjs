@@ -12,12 +12,49 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname+'/public'));
 
 
+//Validation
+const {check, validationResult} = require('express-validator'); // ES6 standard for destructuring an object
 
-router.get('/', function(req, res) {   
+var emailRegex = /([a-zA-Z0-9]{1,}@[a-zA-Z0-9]{1,}.[a-z]{2,}\.?[a-z]{2,}?)/;
+var passwordRegex = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+//function to check a value using regular expression
+function checkRegex(userInput, regex){
+  if(regex.test(userInput)){
+      return true;
+  }
+  else{
+      return false;
+  }
+}
+// Custom phone validation function
+function customPasswordValidation(value){
+  if(!checkRegex(value, passwordRegex)){
+      throw new Error('Password should be at least 6 to 16 maximum');
+  }
+  return true;
+}
+
+
+
+router.get('/',function(req, res) {   
   res.render('register')
 });
 
-router.post('/', function(req, res){
+router.post('/', [
+  check('firstName', 'Must have a first name').not().isEmpty(),
+  check('lastName', 'Must have a last name').not().isEmpty(),
+  check('email', 'Must have email').isEmail(),
+  check('inputPassword').custom(customPasswordValidation)
+
+], function(req, res){
+
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    res.render('register', {
+      errors:errors.array()
+    });
+  }
+  else{
   var firstName = req.body.firstName; 
   var lastName = req.body.lastName;
   var email = req.body.email;
@@ -32,7 +69,7 @@ router.post('/', function(req, res){
   console.log(email);
   console.log(inputPassword);
   console.log(repeatPassword);
-
+}
   res.render('registerResult')
 });
 
