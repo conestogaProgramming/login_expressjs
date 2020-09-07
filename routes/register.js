@@ -10,10 +10,11 @@ app.engine('html', require('ejs').renderFile);
 app.set('views', path.join(__dirname, 'views'));
 //use public folder for CSS etc.
 app.use(express.static(__dirname+'/public'));
-
+const { body } = require('express-validator/check');
 
 //Validation
 const {check, validationResult} = require('express-validator'); // ES6 standard for destructuring an object
+const { selectFields } = require('express-validator/src/select-fields');
 
 var emailRegex = /([a-zA-Z0-9]{1,}@[a-zA-Z0-9]{1,}.[a-z]{2,}\.?[a-z]{2,}?)/;
 var passwordRegex = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
@@ -26,7 +27,7 @@ function checkRegex(userInput, regex){
       return false;
   }
 }
-// Custom phone validation function
+// Custom password validation function
 function customPasswordValidation(value){
   if(!checkRegex(value, passwordRegex)){
       throw new Error('Password should be at least 6 to 16 maximum');
@@ -44,11 +45,17 @@ router.post('/', [
   check('firstName', 'Must have a first name').not().isEmpty(),
   check('lastName', 'Must have a last name').not().isEmpty(),
   check('email', 'Must have email').isEmail(),
-  check('inputPassword').custom(customPasswordValidation)
-
-], function(req, res){
-
+  check('inputPassword').custom(customPasswordValidation),
+  body('inputPassword').custom((value, { req }) => {
+    if (value !== req.body.repeatPassword) {
+        throw new Error('Password confirmation does not match password');
+        }
+        return true;
+      })
+] ,function(req, res){
   const errors = validationResult(req);
+  console.log(errors);
+
   if(!errors.isEmpty()){
     res.render('register', {
       errors:errors.array()
