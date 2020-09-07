@@ -12,6 +12,23 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname+'/public'));
 const { body } = require('express-validator/check');
 
+//mongoDB 
+const mongoose = require('mongoose');
+var url = 'mongodb://localhost:27017/loginProject'
+mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+// set up the model for the user info 
+const User = mongoose.model('User', {
+  firstName : String,
+  lastName : String,
+  email : String,
+  password : String
+})
+
+
 //Validation
 const {check, validationResult} = require('express-validator'); // ES6 standard for destructuring an object
 const { selectFields } = require('express-validator/src/select-fields');
@@ -68,16 +85,30 @@ router.post('/', [
   var inputPassword = req.body.inputPassword;
   var repeatPassword = req.body.repeatPassword;
 
+  // create an object to store in the DB
+  var userObject = {
+    firstName : firstName,
+    lastName : lastName,
+    email : email,
+    password : inputPassword 
+  }
+  // Store DB
+  var newUser = new User(userObject);
+
+  //Save the user 
+  newUser.save().then(function(){
+    console.log('a new user information saved');
+  }).then(function(){
+    // Fetch Data from MongoDB 
+    User.findOne({firstName : firstName, lastName : lastName}, function(err, user){
+      console.log(err);
+      res.render('registerResult', {userResult : user })
+    });
+  });
 
 
-  
-  console.log(firstName);
-  console.log(lastName);
-  console.log(email);
-  console.log(inputPassword);
-  console.log(repeatPassword);
 }
-  res.render('registerResult')
+  
 });
 
 module.exports = router;

@@ -28,7 +28,9 @@
     "helmet": "*",
     "sanitize-html": "*",
     "session-file-store": "*",
-    "express-validator": "*"
+    "express-validator": "*",
+    "connect-flash": "*",
+    "mongoose": "*"
   },
   "devDependencies": {},
   "keywords": [],
