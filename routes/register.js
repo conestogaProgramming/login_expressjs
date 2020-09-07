@@ -12,7 +12,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname+'/public'));
 
 
-
 router.get('/', function(req, res) {   
   res.render('register')
 });
@@ -23,9 +22,6 @@ router.post('/', function(req, res){
   var email = req.body.email;
   var inputPassword = req.body.inputPassword;
   var repeatPassword = req.body.repeatPassword;
-
-
-
   
   console.log(firstName);
   console.log(lastName);
