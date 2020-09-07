@@ -27,7 +27,8 @@
     "express-session": "*",
     "helmet": "*",
     "sanitize-html": "*",
-    "session-file-store": "*"
+    "session-file-store": "*",
+    "express-validator": "*"
   },
   "devDependencies": {},
   "keywords": [],

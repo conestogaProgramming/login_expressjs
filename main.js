@@ -31,6 +31,7 @@ app.use(express.static(__dirname+'/public'));
 app.use('/oauth', oAuthRouter);
 // 일신 라우터
 app.use('/', loginRouter); 
+app.use('/login', loginRouter); 
 // 은석 라우터
 app.use('/register', registerRouter); 
 
