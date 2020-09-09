@@ -32,15 +32,21 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
   var email = req.body.email;
   var password = req.body.password;
-  var loggedinUser = register.User;
 
+  var loggedUser = mongoose.model('users', {
+    firstName : String,
+    lastName : String,
+    email : String,
+    password : String
+  });
 
-  loggedinUser.findOne({email: email, password: password}).exec(function(err, user){
+  loggedUser.findOne({email: email, password: password}).exec(function(err, user){
     console.log('Error: ' + err);
     console.log('User: ' + user);
     if(user){
+       console.log('UserName: ' + user.firstName + user.lastName);
         //store username in session and set logged in true
-        req.session.userName = `${user.firstName} ${user.lastName}`;
+        req.session.userName = user.firstName;
         req.session.userLoggedIn = true;
         // redirect to the dashboard
         res.redirect('/loginResult');
