@@ -32,23 +32,23 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
   var email = req.body.email;
   var password = req.body.password;
-  // var loggedinUser = register.User;
-  // console.log(loggedinUser);
+  var loggedinUser = register.User;
 
-  // loggedinUser.findOne({email: email, password: password}).exec(function(err, user){
-  //   console.log('Error: ' + err);
-  //   console.log('User: ' + user);
-  //   if(user){
-  //       //store username in session and set logged in true
-  //       req.session.userName = `${user.firstName} ${user.lastName}`;
-  //       req.session.userLoggedIn = true;
-  //       // redirect to the dashboard
-  //       res.redirect('/loginResult');
-  //   }
-  //   else{
-  //       res.render('login', {error: 'Sorry, cannot login!'});
-  //   }
-  // });
+
+  loggedinUser.findOne({email: email, password: password}).exec(function(err, user){
+    console.log('Error: ' + err);
+    console.log('User: ' + user);
+    if(user){
+        //store username in session and set logged in true
+        req.session.userName = `${user.firstName} ${user.lastName}`;
+        req.session.userLoggedIn = true;
+        // redirect to the dashboard
+        res.redirect('/loginResult');
+    }
+    else{
+        res.render('login', {error: 'Sorry, cannot login!'});
+    }
+  });
 
 });
 
