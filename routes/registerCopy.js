@@ -11,6 +11,7 @@ app.set('views', path.join(__dirname, 'views'));
 //use public folder for CSS etc.
 app.use(express.static(__dirname+'/public'));
 const { body } = require('express-validator/check');
+
 const nodemailer = require('nodemailer');
 
 //mongoDB 
@@ -29,6 +30,7 @@ const User = mongoose.model('User', {
   password : String
 })
 
+
 //Validation
 const {check, validationResult} = require('express-validator'); // ES6 standard for destructuring an object
 const { selectFields } = require('express-validator/src/select-fields');
@@ -44,7 +46,6 @@ function checkRegex(userInput, regex){
       return false;
   }
 }
-
 // Custom password validation function
 function customPasswordValidation(value){
   if(!checkRegex(value, passwordRegex)){
@@ -53,10 +54,43 @@ function customPasswordValidation(value){
   return true;
 }
 
-router.get('/',function(req, res) {   
 
+
+router.get('/',function(req, res) {   
   res.render('register')
 });
+
+router.post("/", function(req, res, next){
+  let email = req.body.email;
+
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'relish87y@gmail.com',  // gmail 계정 아이디를 입력
+      pass: 'trade1243'          // gmail 계정의 비밀번호를 입력
+    }
+  });
+
+  let mailOptions = {
+    from: 'relish87y@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+    to: email ,                     // 수신 메일 주소
+    subject: 'Sending Email using Node.js',   // 제목
+    text: 'I am Sean!'  // 내용
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    }
+    else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
+  res.redirect("/");
+})
+
+
 
 router.post('/', [
   check('firstName', 'Must have a first name').not().isEmpty(),
@@ -69,33 +103,6 @@ router.post('/', [
         }
         return true;
   })], function(req, res){
-
-    // 이메일 인증 using nodemailer
-    let email = req.body.email;
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'relish87y@gmail.com',  // gmail 계정 아이디
-        pass: 'trade1243'          // gmail 계정 임시 비밀번호, 암호화는 시간부족으로 생략
-      }
-    });
-    let mailOptions = {
-      from: 'relish87y@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
-      to: email ,                     // 수신 메일 주소
-      subject: 'Hello. This is CodingProject. Please verify your email.',
-      html: '<p>Please click the below link !</p>' +
-        "<a href='http://localhost:3000/verify/?email="+ email +"&token=abcdefg'>Verify</a>"
-    };
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-      }
-      else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
-    
-
     const errors = validationResult(req);
     console.log(errors);
 
@@ -106,7 +113,7 @@ router.post('/', [
     } else {
       var firstName = req.body.firstName; 
       var lastName = req.body.lastName;
-      //var email = req.body.email;
+      var email = req.body.email;
       var inputPassword = req.body.inputPassword;
       var repeatPassword = req.body.repeatPassword;
 
@@ -125,7 +132,7 @@ router.post('/', [
         console.log('a new user information saved');
       }).then(function(){
         // Fetch Data from MongoDB 
-        User.findOne({firstName : firstName, lastName : lastName, email : email}, function(err, user){
+        User.findOne({firstName : firstName, lastName : lastName}, function(err, user){
           console.log(err);
           res.render('registerResult', {userResult : user })
         });
