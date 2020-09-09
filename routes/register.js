@@ -28,7 +28,6 @@ const User = mongoose.model('User', {
   password : String
 })
 
-
 //Validation
 const {check, validationResult} = require('express-validator'); // ES6 standard for destructuring an object
 const { selectFields } = require('express-validator/src/select-fields');
@@ -55,6 +54,7 @@ function customPasswordValidation(value){
 
 
 router.get('/',function(req, res) {   
+
   res.render('register')
 });
 
