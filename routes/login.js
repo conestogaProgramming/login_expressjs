@@ -1,5 +1,4 @@
 let express = require('express');
-//let router = express.Router();
 
 const bodyParser = require('body-parser');
 // set up variables to use packages
@@ -54,7 +53,7 @@ app.post('/', function(req, res) {
       console.log(req.session);
 
       // redirect to the dashboard
-      res.render('loginResult', {session: session.userName});
+      res.render('loginResult', {session: session});
     } else {
       res.render('login', {error: 'Sorry, cannot login!'});
     }
