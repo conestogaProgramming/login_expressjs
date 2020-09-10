@@ -30,6 +30,12 @@ app.get('/', function(req, res) {
   res.render('login');
 });
 
+app.get('/logout', function(req, res) {
+  req.session.destroy(function(err) {
+    res.redirect('/');
+  })
+});
+
 app.post('/', function(req, res) {
   var email = req.body.email;
   var password = req.body.password;
