@@ -1,10 +1,9 @@
 let express = require('express');
-let router = express.Router();
-let register = require('./register.js');
+//let router = express.Router();
 
 const bodyParser = require('body-parser');
 // set up variables to use packages
-var app = express();
+let app = express.Router();
 app.use(bodyParser.urlencoded({extended:false}));
 
 // set up the DB connection
@@ -15,48 +14,51 @@ mongoose.connect('mongodb://localhost:27017/loginProject', {
 });
 
 // get expression session
-const session = require('express-session');
+let session = require('express-session');
+let FileStore = require('session-file-store')(session);
 
 // set up session
 app.use(session({
   secret: 'superrandomsecret',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+
+  // 디폴트 옵션으로 ./sessions 폴더 자동으로 생성됨
+  store: new FileStore()
 }));
 
-
-router.get('/', function(req, res) {   
+app.get('/', function(req, res) {   
   res.render('login');
 });
 
-router.post('/', function(req, res) {
+app.post('/', function(req, res) {
   var email = req.body.email;
   var password = req.body.password;
 
-  var loggedUser = mongoose.model('users', {
+  var LoggedUser = mongoose.model('users', {
     firstName : String,
     lastName : String,
     email : String,
     password : String
   });
 
-  loggedUser.findOne({email: email, password: password}).exec(function(err, user){
+  LoggedUser.findOne({email: email, password: password}).exec(function(err, loggedUser){
     console.log('Error: ' + err);
-    console.log('User: ' + user);
-    if(user){
-       console.log('UserName: ' + user.firstName + user.lastName);
-        //store username in session and set logged in true
-        req.session.userName = user.firstName;
-        req.session.userLoggedIn = true;
-        // redirect to the dashboard
-        res.redirect('/loginResult');
-    }
-    else{
-        res.render('login', {error: 'Sorry, cannot login!'});
+    console.log('User: ' + loggedUser);
+    if(loggedUser){
+      console.log(`UserName: ${loggedUser.firstName} ${loggedUser.lastName}`);
+      
+      //store username in session and set logged in true
+      req.session.userName = loggedUser.firstName;
+      req.session.userLoggedIn = true;
+      console.log(req.session);
+
+      // redirect to the dashboard
+      res.render('loginResult', {session: session.userName});
+    } else {
+      res.render('login', {error: 'Sorry, cannot login!'});
     }
   });
-
 });
 
-
-module.exports = router;
+module.exports = app;
