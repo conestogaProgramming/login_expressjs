@@ -6,8 +6,10 @@ let app = express.Router();
 app.use(bodyParser.urlencoded({extended:false}));
 
 // set up the DB connection
+
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/loginProject', {
+let mongoDBcloud ='mongodb+srv://Admin:@cluster0.y5ghq.azure.mongodb.net/loginProject?retryWrites=true&w=majority'
+mongoose.connect(mongoDBcloud, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -59,7 +61,7 @@ app.post('/', function(req, res) {
       console.log(req.session);
 
       // redirect to the dashboard
-      res.render('loginResult', {session: session});
+      res.render('loginResult', {session: req.session});
     } else {
       res.render('login', {error: 'Sorry, cannot login!'});
     }

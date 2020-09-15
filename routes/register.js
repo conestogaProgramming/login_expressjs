@@ -1,7 +1,9 @@
 let express = require('express');
 let router = express.Router();
+
 const app = express() ;
 const path = require('path');
+
 let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
 app.set('view engine', 'ejs');
@@ -13,10 +15,10 @@ app.use(express.static(__dirname+'/public'));
 const { body } = require('express-validator/check');
 const nodemailer = require('nodemailer');
 
-//mongoDB 
+
 const mongoose = require('mongoose');
-var url = 'mongodb://localhost:27017/loginProject'
-mongoose.connect(url, {
+let mongoDBcloud ='cluster0.y5ghq.azure.mongodb.net:27017/loginProject'
+mongoose.connect(mongoDBcloud, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -76,7 +78,7 @@ router.post('/', [
       service: 'gmail',
       auth: {
         user: 'relish87y@gmail.com',  // gmail 계정 아이디
-        pass: 'trade1243'          // gmail 계정 임시 비밀번호, 암호화는 시간부족으로 생략
+        pass: 'trade1243'          // gmail 계정 임시 비밀번호, 암호화는 시간부족으로 생략 bcrypt
       }
     });
     let mailOptions = {
