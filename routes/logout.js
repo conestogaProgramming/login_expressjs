@@ -1,11 +1,7 @@
 let express = require('express');
-<<<<<<< Updated upstream
 let router = express.Router();
 let register = require('./register.js');
 
-=======
-require('dotenv').config();
->>>>>>> Stashed changes
 const bodyParser = require('body-parser');
 // set up variables to use packages
 var app = express();
@@ -13,12 +9,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 // set up the DB connection
 const mongoose = require('mongoose');
-<<<<<<< Updated upstream
 mongoose.connect('mongodb://localhost:27017/loginProject', {
-=======
-let mongoDBcloud = process.env.DB_URL;
-mongoose.connect(mongoDBcloud, {
->>>>>>> Stashed changes
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -34,16 +25,8 @@ app.use(session({
 }));
 
 
-<<<<<<< Updated upstream
 router.get('/', function(req, res) {   
   res.render('login');
-=======
-// 로그아웃
-app.get('/logout', function(req, res) {
-  req.session.destroy(function(err) {
-    res.redirect('/');
-  })
->>>>>>> Stashed changes
 });
 
 router.post('/', function(req, res) {
@@ -61,7 +44,7 @@ router.post('/', function(req, res) {
     console.log('Error: ' + err);
     console.log('User: ' + user);
     if(user){
-       console.log('UserName: ' + user.firstName + user.lastName);
+        console.log('UserName: ' + user.firstName + user.lastName);
         //store username in session and set logged in true
         req.session.userName = user.firstName;
         req.session.userLoggedIn = true;

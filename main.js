@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express() ;
 const path = require('path');
-// Deploy할때 서버 환경에 포트넘버가 있는지 확인하고 없을경우 3000을 사용
-const PORT = process.env.PORT || 3000;
+require('dotenv').config();
+const port = process.env.PORT;
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
@@ -38,6 +38,6 @@ app.use(function(err, req, res, next){
   res.status(500).send("Something broke!");
 })
 
-app.listen(PORT, function() {
-  console.log(`App listening on port ${PORT}!`)
+app.listen(port, function() {
+  console.log(`App listening on port ${port}!`)
 });
