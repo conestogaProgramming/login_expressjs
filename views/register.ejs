@@ -113,16 +113,16 @@
                 <a class="small" href="login">Already have an account? Login!</a>
               </div>
 
-               <!-- validation error -->
-               <div class="text-center">
-                 <% if (typeof(errors) != 'undefined'){
-                   for(var error of errors){
-                     %>
-                     <p class = "text-danger"><%= error.msg %></p>
-                    <%
-                   }
-                 }
-                 %>
+              <!-- validation error -->
+              <div class="text-center">
+                <% if (typeof(errors) != 'undefined'){
+                  for(var error of errors){
+                    %>
+                    <p class = "text-danger"><%= error.msg %></p>
+                  <%
+                  }
+                }
+                %>
               </div>
             </div>
           </div>

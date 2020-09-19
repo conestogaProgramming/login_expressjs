@@ -1,11 +1,11 @@
 let express = require('express');
 let router = express.Router();
-<<<<<<< Updated upstream
-=======
+
 require('dotenv').config();
->>>>>>> Stashed changes
+
 const app = express() ;
 const path = require('path');
+
 let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
 app.set('view engine', 'ejs');
@@ -17,15 +17,10 @@ app.use(express.static(__dirname+'/public'));
 const { body } = require('express-validator/check');
 const nodemailer = require('nodemailer');
 
-//mongoDB 
+
 const mongoose = require('mongoose');
-<<<<<<< Updated upstream
-var url = 'mongodb://localhost:27017/loginProject'
-mongoose.connect(url, {
-=======
 let mongoDBcloud = process.env.DB_URL;
 mongoose.connect(mongoDBcloud, {
->>>>>>> Stashed changes
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -84,13 +79,8 @@ router.post('/', [
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-<<<<<<< Updated upstream
-        user: 'relish87y@gmail.com',  // gmail 계정 아이디
-        pass: 'trade1243'          // gmail 계정 임시 비밀번호, 암호화는 시간부족으로 생략
-=======
         user: process.env.MAIL_ID, // gmail 계정 아이디
         pass: process.env.MAIL_PW // gmail 계정 비밀번호
->>>>>>> Stashed changes
       }
     });
     let mailOptions = {
