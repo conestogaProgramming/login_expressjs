@@ -44,7 +44,7 @@ router.post('/', function(req, res) {
     console.log('Error: ' + err);
     console.log('User: ' + user);
     if(user){
-       console.log('UserName: ' + user.firstName + user.lastName);
+        console.log('UserName: ' + user.firstName + user.lastName);
         //store username in session and set logged in true
         req.session.userName = user.firstName;
         req.session.userLoggedIn = true;

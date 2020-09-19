@@ -1,6 +1,8 @@
 let express = require('express');
 let router = express.Router();
 
+require('dotenv').config();
+
 const app = express() ;
 const path = require('path');
 
@@ -17,7 +19,7 @@ const nodemailer = require('nodemailer');
 
 
 const mongoose = require('mongoose');
-let mongoDBcloud ='cluster0.y5ghq.azure.mongodb.net:27017/loginProject'
+let mongoDBcloud = process.env.DB_URL;
 mongoose.connect(mongoDBcloud, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -77,12 +79,12 @@ router.post('/', [
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'relish87y@gmail.com',  // gmail 계정 아이디
-        pass: 'trade1243'          // gmail 계정 임시 비밀번호, 암호화는 시간부족으로 생략 bcrypt
+        user: process.env.MAIL_ID, // gmail 계정 아이디
+        pass: process.env.MAIL_PW // gmail 계정 비밀번호
       }
     });
     let mailOptions = {
-      from: 'relish87y@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+      from: process.env.MAIL_ID,    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
       to: email ,                     // 수신 메일 주소
       subject: 'Hello. This is CodingProject. Please verify your email.',
       html: '<p>Please click the below link !</p>' +

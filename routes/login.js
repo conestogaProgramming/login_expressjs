@@ -1,5 +1,5 @@
 let express = require('express');
-
+require('dotenv').config();
 const bodyParser = require('body-parser');
 // set up variables to use packages
 let app = express.Router();
@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 // set up the DB connection
 
 const mongoose = require('mongoose');
-let mongoDBcloud ='mongodb+srv://Admin:@cluster0.y5ghq.azure.mongodb.net/loginProject?retryWrites=true&w=majority'
+let mongoDBcloud = process.env.DB_URL;
 mongoose.connect(mongoDBcloud, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -32,6 +32,7 @@ app.get('/', function(req, res) {
   res.render('login');
 });
 
+// 로그아웃
 app.get('/logout', function(req, res) {
   req.session.destroy(function(err) {
     res.redirect('/');
