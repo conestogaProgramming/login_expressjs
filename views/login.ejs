@@ -14,7 +14,7 @@
   <meta name="google-signin-client_id" content="251124786260-fr5q6pg249tthkstvf8f9lkhb28kk9tc.apps.googleusercontent.com"> 
   
 
-  <title>Login-Ilshin</title>
+  <title>Login</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -22,6 +22,8 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+  <script src='https://www.google.com/recaptcha/api.js'></script>
 
 </head>
 
@@ -61,6 +63,7 @@
                       Login
                     </button>
                     <hr>
+
                     <!-- login error -->
                     <div class="text-center">
                       <% if (typeof(error) != 'undefined'){
@@ -70,7 +73,10 @@
                         }
                       
                       %>
-                  </div>
+                    </div>
+                  
+                    <div class="g-recaptcha" data-sitekey="6Ld5BYUUAAAAAMx6NO3kbhS9jyQcR4yqy59Tvza2"></div>
+
                     <!-- 사용자 정의 구글로그인 버튼 -->
                     <input type="button" id="loginBtn" value="Goolge checking..." class="btn btn-google btn-user btn-block" onclick="
                       if(this.value === 'Google Login') {

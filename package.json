@@ -22,15 +22,18 @@
   "dependencies": {
     "body-parser": "*",
     "compression": "*",
+    "connect-flash": "*",
+    "connect-mongo": "^3.2.0",
+    "dotenv": "^8.2.0",
     "ejs": "*",
     "express": "*",
     "express-session": "*",
-    "helmet": "*",
-    "sanitize-html": "*",
-    "session-file-store": "*",
     "express-validator": "*",
-    "connect-flash": "*",
-    "mongoose": "*"
+    "helmet": "*",
+    "mongoose": "*",
+    "nodemailer": "^6.4.11",
+    "sanitize-html": "*",
+    "session-file-store": "*"
   },
   "devDependencies": {},
   "keywords": [],

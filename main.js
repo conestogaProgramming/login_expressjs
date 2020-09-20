@@ -1,23 +1,20 @@
 const express = require('express');
 const app = express() ;
 const path = require('path');
-// Deploy할때 서버 환경에 포트넘버가 있는지 확인하고 없을경우 3000을 사용
-const PORT = process.env.PORT || 3000;
+require('dotenv').config();
+const port = process.env.PORT;
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
 
-// 션 라우터
-let oAuthRouter = require('./routes/oauth');
-// 일신 라우터
 let loginRouter = require('./routes/login');
-// 은석 라우터
-let registerRouter = require('./routes/register'); 
-
+let registerRouter = require('./routes/register');
+let verifyRouter = require('./routes/loginAfter');
+let logoutRouter = require('./routes/logout');
 
 // view 경로 설정
 // app.set('views', __dirname + '/public');
-// set view경로 설정과 static folder 설정의 차이는 뭘까? 
+// set view경로 설정과 static folder 설정의 차이는 뭘까?
 // app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
@@ -26,17 +23,11 @@ app.set('views', path.join(__dirname, 'views'));
 //use public folder for CSS etc.
 app.use(express.static(__dirname+'/public'));
 
-
-// 션 라우터
-app.use('/oauth', oAuthRouter);
-// 일신 라우터
-app.use('/', loginRouter); 
-app.use('/login', loginRouter); 
-// 은석 라우터
-app.use('/register', registerRouter); 
-
-
-
+app.use('/', loginRouter);
+app.use('/login', loginRouter);
+app.use('/register', registerRouter);
+app.use('/verify', verifyRouter);
+app.use('/logout', logoutRouter); 
 
 // 미들웨어는 순차적으로 실행됨(next 파라미터 때문?), 여기까지 쭉 못찾으면 밑의 에러문구 실행
 app.use(function(req, res, next){
@@ -49,6 +40,6 @@ app.use(function(err, req, res, next){
   res.status(500).send("Something broke!");
 })
 
-app.listen(PORT, function() {
-  console.log(`App listening on port ${PORT}!`)
+app.listen(port, function() {
+  console.log(`App listening on port ${port}!`)
 });
