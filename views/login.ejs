@@ -63,6 +63,7 @@
                       Login
                     </button>
                     <hr>
+
                     <!-- login error -->
                     <div class="text-center">
                       <% if (typeof(error) != 'undefined'){
@@ -72,8 +73,10 @@
                         }
                       
                       %>
-                  </div>
-                  <div class="g-recaptcha" data-sitekey="6Ld5BYUUAAAAAMx6NO3kbhS9jyQcR4yqy59Tvza2"></div>
+                    </div>
+                  
+                    <div class="g-recaptcha" data-sitekey="6Ld5BYUUAAAAAMx6NO3kbhS9jyQcR4yqy59Tvza2"></div>
+
                     <!-- 사용자 정의 구글로그인 버튼 -->
                     <input type="button" id="loginBtn" value="Goolge checking..." class="btn btn-google btn-user btn-block" onclick="
                       if(this.value === 'Google Login') {

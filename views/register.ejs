@@ -7,10 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- 최초 기본 구글로그인 버튼 구현 -->
-  <!-- <meta name="google-signin-client_id" content="251124786260-fr5q6pg249tthkstvf8f9lkhb28kk9tc.apps.googleusercontent.com">  --> 
+  <meta name="author" content="">   
 
   <title>Register</title>
 
@@ -60,10 +57,7 @@
                 <button type = "submit" class= "btn btn-primary btn-user btn-block">
                   Register Account
                 </button>
-                <hr>
-
-                <!-- 기본 구글로그인 버튼 -->
-                <!-- <div class="g-signin2 btn btn-user btn-block" data-onsuccess="onSignIn"></div> -->
+                <hr>               
 
                 <!-- 사용자 정의 구글로그인 버튼 -->
                 <input type="button" id="loginBtn" value="Goolge checking..." class="btn btn-google btn-user btn-block" onclick="
@@ -86,23 +80,7 @@
                 <fb:login-button scope="public_profile,email,instagram_basic" onlogin="checkLoginState();" class="btn btn-facebook btn-user btn-block">
                 </fb:login-button>
                 <div id="status">
-                </div>
-
-                <!-- 사용자 정의 페이스북 로그인 버튼 -->
-                <!-- 페이스북은 https가 아닌 localhost의 http 서버로는 기능을 쓸 수 없다 아래는 나중을 위한 코드 -->
-                <!-- <input type="button" id="authBtn" value="Facebook checking..." onclick="
-                  if(this.value === 'Facebook Login') {
-                    // now logout status
-                    FB.login(function(res) {
-                      console.log('login =>', res)
-                    });
-                  } else {
-                    // now login status
-                    FB.logout(function(res) {
-                      console.log('logout =>', res)
-                    });
-                  }                
-                "> -->
+                </div>                
 
               </form>
               <hr>
@@ -124,6 +102,17 @@
                 }
                 %>
               </div>
+
+              <!-- 이메일 중복 error -->
+              <div class="text-center">
+                <% if (typeof(err) != 'undefined'){
+                    %>                    
+                    <p class = "text-danger"><%= err %></p>
+                  <%
+                  }                
+                %>
+              </div>
+              
             </div>
           </div>
         </div>
@@ -141,8 +130,6 @@
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>  
-
-
   
   <!-- 구글로그인 -->
   <script src="https://apis.google.com/js/platform.js" async defer></script>  
@@ -161,18 +148,7 @@
         loginBtn.value = 'Google Login';
       }
     }
-  </script>
-
-  <!-- 최초 기본 구글로그인 버튼의 함수 -->
-  <!-- <script>
-    function onSignIn(googleUser) {
-      let profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    }
-  </script> -->
+  </script>  
   
   <!-- 구글로그인 auth 초기화 -->
   <script>
