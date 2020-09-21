@@ -13,8 +13,10 @@ app.use(express.static(__dirname+'/public'));
 // 로그아웃
 router.get('/', function(req, res) { 
 
+
   req.session.destroy(function(err) {
     res.render('login');
+
   });
 
   

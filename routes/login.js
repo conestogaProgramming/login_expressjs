@@ -3,6 +3,7 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 var path = require('path');
 
+
 let router = express.Router();
 let app = express();
 // set up variables to use packages
@@ -19,7 +20,9 @@ mongoose.connect(mongoDBcloud, {
 });
 
 // get expression session
+
 const session = require('express-session');
+
 let FileStore = require('session-file-store')(session);
 
 // set up session
@@ -29,18 +32,24 @@ router.use(session({
   saveUninitialized: true,
 
   // 디폴트 옵션으로 ./sessions 폴더 자동으로 생성됨
+
   store: new FileStore(),
   cookie:{
     maxAge: 1000 * 60 * 5 // 5분후 폭파
   }
+
+
+
 }));
 
-router.get('/', function(req, res) {   
+app.get('/', function(req, res) {   
   res.render('login');
 });
 
 
+
 router.post('/', function(req, res) {
+
   let email = req.body.email;
   let password = req.body.password;
 
@@ -57,16 +66,18 @@ router.post('/', function(req, res) {
     if(loggedUser){
       console.log(`UserName: ${loggedUser.firstName} ${loggedUser.lastName}`);
       
+
       var rememberMe = req.body.rememberMe;
 
       if(rememberMe == 'yes'){
         req.session.cookie.expires = new Date(Date.now() + (1000 * 60 * 60 * 24))
       }
+
       //store username in session and set logged in true
       req.session.userName = loggedUser.firstName;
       req.session.userLoggedIn = true;
       console.log(req.session);
-    
+
 
       // redirect to the dashboard
       res.render('loginResult', {session: req.session});
@@ -74,7 +85,9 @@ router.post('/', function(req, res) {
       res.render('login', {error: 'Sorry, cannot login!'});
     }
   });
-
 });
 
+
 module.exports = router;
+
+

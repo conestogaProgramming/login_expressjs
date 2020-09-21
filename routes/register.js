@@ -1,3 +1,4 @@
+
 let express = require('express');
 let router = express.Router();
 require('dotenv').config();
@@ -9,6 +10,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 //use public folder for CSS etc.
 app.use(express.static(__dirname+'/public'));
 
+
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 // set path to public folders and view folders
@@ -19,8 +21,6 @@ app.use(express.static(__dirname+'/public'));
 const { body } = require('express-validator/check');
 const nodemailer = require('nodemailer');
 
-
-//mongoDB 
 const mongoose = require('mongoose');
 let mongoDBcloud = process.env.DB_URL;
 mongoose.connect(mongoDBcloud, {
@@ -38,10 +38,7 @@ const User = mongoose.model('User', {
 
 //Validation
 const {check, validationResult} = require('express-validator'); // ES6 standard for destructuring an object
-const { selectFields } = require('express-validator/src/select-fields');
-
-var emailRegex = /([a-zA-Z0-9]{1,}@[a-zA-Z0-9]{1,}.[a-z]{2,}\.?[a-z]{2,}?)/;
-var passwordRegex = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+let passwordRegex = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
 //function to check a value using regular expression
 function checkRegex(userInput, regex){
   if(regex.test(userInput)){
@@ -51,18 +48,16 @@ function checkRegex(userInput, regex){
       return false;
   }
 }
+
 // Custom password validation function
 function customPasswordValidation(value){
   if(!checkRegex(value, passwordRegex)){
-      throw new Error('Password should be at least 6 to 16 maximum');
+    throw new Error('Password should be at least 6 to 16 maximum');
   }
   return true;
 }
 
-
-
 router.get('/',function(req, res) {   
-
   res.render('register')
 });
 
@@ -106,6 +101,7 @@ router.post('/', [
           }
         });    
 
+
         const errors = validationResult(req);
         console.log(errors);
 
@@ -127,6 +123,7 @@ router.post('/', [
           }
           // Store DB
           let newUser = new User(userObject);
+
 
           //Save the user 
           newUser.save().then(function(){
