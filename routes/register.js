@@ -1,11 +1,13 @@
-const express = require('express');
-const router = express.Router();
+let express = require('express');
+let router = express.Router();
 require('dotenv').config();
-const app = express();
+const app = express() ;
 const path = require('path');
 
-const bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
+//use public folder for CSS etc.
+app.use(express.static(__dirname+'/public'));
 
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
@@ -17,6 +19,8 @@ app.use(express.static(__dirname+'/public'));
 const { body } = require('express-validator/check');
 const nodemailer = require('nodemailer');
 
+
+//mongoDB 
 const mongoose = require('mongoose');
 let mongoDBcloud = process.env.DB_URL;
 mongoose.connect(mongoDBcloud, {
@@ -24,7 +28,7 @@ mongoose.connect(mongoDBcloud, {
   useUnifiedTopology: true
 });
 
-// set up the model for the user info
+// set up the model for the user info 
 const User = mongoose.model('User', {
   firstName : String,
   lastName : String,
@@ -34,7 +38,10 @@ const User = mongoose.model('User', {
 
 //Validation
 const {check, validationResult} = require('express-validator'); // ES6 standard for destructuring an object
-let passwordRegex = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+const { selectFields } = require('express-validator/src/select-fields');
+
+var emailRegex = /([a-zA-Z0-9]{1,}@[a-zA-Z0-9]{1,}.[a-z]{2,}\.?[a-z]{2,}?)/;
+var passwordRegex = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
 //function to check a value using regular expression
 function checkRegex(userInput, regex){
   if(regex.test(userInput)){
@@ -44,16 +51,18 @@ function checkRegex(userInput, regex){
       return false;
   }
 }
-
 // Custom password validation function
 function customPasswordValidation(value){
   if(!checkRegex(value, passwordRegex)){
-    throw new Error('Password should be at least 6 to 16 maximum');
+      throw new Error('Password should be at least 6 to 16 maximum');
   }
   return true;
 }
 
-router.get('/',function(req, res) {
+
+
+router.get('/',function(req, res) {   
+
   res.render('register')
 });
 
@@ -70,10 +79,10 @@ router.post('/', [
   })], function(req, res){
     let email = req.body.email;
     User.findOne({email: email}).exec(function(err, user){
-      if(user) {
+      if(user) {        
         res.render('register', {err: 'Email is already registered!'});
       } else {
-        // 이메일 인증 using nodemailer
+        // 이메일 인증 using nodemailer    
         let transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
@@ -95,7 +104,7 @@ router.post('/', [
           else {
             console.log('Email sent: ' + info.response);
           }
-        });
+        });    
 
         const errors = validationResult(req);
         console.log(errors);
@@ -105,8 +114,8 @@ router.post('/', [
               errors:errors.array()
           });
         } else {
-          let firstName = req.body.firstName;
-          let lastName = req.body.lastName;
+          let firstName = req.body.firstName; 
+          let lastName = req.body.lastName;          
           let inputPassword = req.body.inputPassword;
 
           // create an object to store in the DB
@@ -114,26 +123,26 @@ router.post('/', [
             firstName : firstName,
             lastName : lastName,
             email : email,
-            password : inputPassword
+            password : inputPassword 
           }
           // Store DB
           let newUser = new User(userObject);
 
-          //Save the user
+          //Save the user 
           newUser.save().then(function(){
             console.log('a new user information saved');
           }).then(function(){
-            // Fetch Data from MongoDB
+            // Fetch Data from MongoDB 
             User.findOne({firstName : firstName, lastName : lastName, email : email}, function(err, user){
               console.log(err);
               res.render('registerResult', {userResult : user })
             });
           });
         }
-      }
-    });
+      }            
+    }); 
   }
-
+  
 );
 
 module.exports = router;

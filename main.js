@@ -27,6 +27,7 @@ app.use('/', loginRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/verify', verifyRouter);
+app.use('/logout', logoutRouter); 
 
 // 미들웨어는 순차적으로 실행됨(next 파라미터 때문?), 여기까지 쭉 못찾으면 밑의 에러문구 실행
 app.use(function(req, res, next){
