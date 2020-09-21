@@ -1,15 +1,11 @@
-
-let express = require('express');
-let router = express.Router();
+const express = require('express');
+const router = express.Router();
 require('dotenv').config();
-const app = express() ;
+const app = express();
 const path = require('path');
 
-let bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
-//use public folder for CSS etc.
-app.use(express.static(__dirname+'/public'));
-
 
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
@@ -28,7 +24,7 @@ mongoose.connect(mongoDBcloud, {
   useUnifiedTopology: true
 });
 
-// set up the model for the user info 
+// set up the model for the user info
 const User = mongoose.model('User', {
   firstName : String,
   lastName : String,
@@ -57,7 +53,7 @@ function customPasswordValidation(value){
   return true;
 }
 
-router.get('/',function(req, res) {   
+router.get('/',function(req, res) {
   res.render('register')
 });
 
@@ -74,10 +70,10 @@ router.post('/', [
   })], function(req, res){
     let email = req.body.email;
     User.findOne({email: email}).exec(function(err, user){
-      if(user) {        
+      if(user) {
         res.render('register', {err: 'Email is already registered!'});
       } else {
-        // 이메일 인증 using nodemailer    
+        // 이메일 인증 using nodemailer
         let transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
@@ -99,8 +95,7 @@ router.post('/', [
           else {
             console.log('Email sent: ' + info.response);
           }
-        });    
-
+        });
 
         const errors = validationResult(req);
         console.log(errors);
@@ -110,8 +105,8 @@ router.post('/', [
               errors:errors.array()
           });
         } else {
-          let firstName = req.body.firstName; 
-          let lastName = req.body.lastName;          
+          let firstName = req.body.firstName;
+          let lastName = req.body.lastName;
           let inputPassword = req.body.inputPassword;
 
           // create an object to store in the DB
@@ -119,27 +114,26 @@ router.post('/', [
             firstName : firstName,
             lastName : lastName,
             email : email,
-            password : inputPassword 
+            password : inputPassword
           }
           // Store DB
           let newUser = new User(userObject);
 
-
-          //Save the user 
+          //Save the user
           newUser.save().then(function(){
             console.log('a new user information saved');
           }).then(function(){
-            // Fetch Data from MongoDB 
+            // Fetch Data from MongoDB
             User.findOne({firstName : firstName, lastName : lastName, email : email}, function(err, user){
               console.log(err);
               res.render('registerResult', {userResult : user })
             });
           });
         }
-      }            
-    }); 
+      }
+    });
   }
-  
+
 );
 
 module.exports = router;
