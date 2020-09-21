@@ -7,6 +7,10 @@ const path = require('path');
 let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
 
+//use public folder for CSS etc.
+app.use(express.static(__dirname+'/public'));
+
+
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 // set path to public folders and view folders

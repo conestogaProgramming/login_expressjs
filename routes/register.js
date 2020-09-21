@@ -1,11 +1,15 @@
-const express = require('express');
-const router = express.Router();
+
+let express = require('express');
+let router = express.Router();
 require('dotenv').config();
-const app = express();
+const app = express() ;
 const path = require('path');
 
-const bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
+//use public folder for CSS etc.
+app.use(express.static(__dirname+'/public'));
+
 
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
@@ -97,6 +101,7 @@ router.post('/', [
           }
         });    
 
+
         const errors = validationResult(req);
         console.log(errors);
 
@@ -118,6 +123,7 @@ router.post('/', [
           }
           // Store DB
           let newUser = new User(userObject);
+
 
           //Save the user 
           newUser.save().then(function(){
