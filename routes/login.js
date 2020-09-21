@@ -1,26 +1,26 @@
 let express = require('express');
-let router = express.Router();
-let register = require('./register.js');
-
+require('dotenv').config();
 const bodyParser = require('body-parser');
+var path = require('path');
+
+let router = express.Router();
 let app = express();
 // set up variables to use packages
-let router = express.Router();
 router.use(bodyParser.urlencoded({extended:false}));
 //use public folder for CSS etc.
-app.use(express.static(__dirname+'/public'));
-
+//app.use(express.static(__dirname+'/public'));
+app.use(express.static(path.join(__dirname, 'public'))); //  "public" off of current is root
 // set up the DB connection
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/loginProject', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+let mongoDBcloud = process.env.DB_URL;
+mongoose.connect(mongoDBcloud, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
-
-
 
 // get expression session
 const session = require('express-session');
+let FileStore = require('session-file-store')(session);
 
 // set up session
 router.use(session({
@@ -39,26 +39,19 @@ router.get('/', function(req, res) {
   res.render('login');
 });
 
-// 로그아웃
-// app.get('/logout', function(req, res) {
-  
-//   req.session.destroy(function(err) {
-//     res.redirect('/');
-//   })
-// });
 
 router.post('/', function(req, res) {
   let email = req.body.email;
   let password = req.body.password;
 
-  var loggedUser = mongoose.model('users', {
+  let LoggedUser = mongoose.model('users', {
     firstName : String,
     lastName : String,
     email : String,
     password : String
   });
 
-  loggedUser.findOne({email: email, password: password}).exec(function(err, user){
+  LoggedUser.findOne({email: email, password: password}).exec(function(err, loggedUser){
     console.log('Error: ' + err);
     console.log('User: ' + loggedUser);
     if(loggedUser){
@@ -67,11 +60,13 @@ router.post('/', function(req, res) {
       var rememberMe = req.body.rememberMe;
 
       if(rememberMe == 'yes'){
-        //store username in session and set logged in true
-        req.session.userName = loggedUser.firstName;
-        req.session.userLoggedIn = true;
-        console.log(req.session);
+        req.session.cookie.expires = new Date(Date.now() + (1000 * 60 * 60 * 24))
       }
+      //store username in session and set logged in true
+      req.session.userName = loggedUser.firstName;
+      req.session.userLoggedIn = true;
+      console.log(req.session);
+    
 
       // redirect to the dashboard
       res.render('loginResult', {session: req.session});
